@@ -40,31 +40,39 @@
       <div class="row-fluid">
         <div class="span3">
           <form>
-            <label class="control-label" for="dbkey">Datenbank</label>
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-folder-open"></i></span>
-              <input type="text" id="dbkey" placeholder="dbkey" value="gvk" onchange="updateQuery()">
+            <div class="control-group">
+              <label class="control-label" for="dbkey">Datenbank</label>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-folder-open"></i></span>
+                <input type="text" id="dbkey" placeholder="dbkey" value="gvk" onchange="updateQuery()">
+              </div>
             </div>
-            <label class="control-label" for="cql">Anfrage (CQL-Syntax)</label>
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-search"></i></span>
-              <input type="text" id="cql" placeholder="CQL-Anfrage" value="pica.all=Zitat" onchange="updateQuery()">
-            </div>
-            <label class="control-label" for="style">Zitationsstil</label>
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-pencil"></i></span>
-              <input type="text" id="style" placeholder="" value="ieee" onchange="updateStyle()">
-            </div>
-            <label class="control-label" for="language">Sprache</label>
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-flag"></i></span>
-              <input type="text" id="language" placeholder="ISO-Code" value="de-DE" onchange="updateLanguage()">
+            <div class="control-group">
+              <label class="control-label" for="cql">Anfrage (CQL-Syntax)</label>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-search"></i></span>
+                <input type="text" id="cql" placeholder="CQL-Anfrage" value="pica.all=Zitat" onchange="updateQuery()">
+              </div>
+              </div>
+            <div class="control-group">
+              <label class="control-label" for="style">Zitationsstil</label>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-pencil"></i></span>
+                <input type="text" id="style" placeholder="" value="ieee" onchange="updateStyle()">
+              </div>
+              </div>
+            <div class="control-group">
+              <label class="control-label" for="locale">Sprache</label>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-flag"></i></span>
+                <input type="text" id="locale" placeholder="ISO-Code" value="de-DE" onchange="updateLocale()">
+              </div>
             </div>
           </form>
           <p>Die Anzahl der Titel ist auf 10 beschränkt.</p>
         </div>
         <div class="span9">
-          <h2>Literaturliste</h2>
+          <h2>Literaturliste <small><a href="#" id="sru" style="display:none">via SRU</a></small></h2>
           <div id="references">[Page generation failure. The bibliography processor requires a browser with Javascript enabled.]</div>
         </div>
       </div>
