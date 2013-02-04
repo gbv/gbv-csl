@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>GBV CSL</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="./css/gbv-bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="./css/gbv-csl.css" />
+    <script type="text/javascript; e4x=1" src="./js/xmle4x.js"></script> 
+	<script type="text/javascript" src="./js/jquery-1.9.0.min.js"></script>
+	<script type="text/javascript" src="./js/xmldom.js"></script>
+	<script type="text/javascript" src="./js/citeproc.js"></script>
+	<script type="text/javascript" src="./js/gbv-csl.js"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-static-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="https://www.gbv.de/" title="Gemeinsamer Bibliotheksverbund"></a>
+          <div class="pull-left" >
+            <h1>CSL&#xA0; <small>Formatierte Literaturlisten</small></h1>
+          </div>
+          <!--ul class="nav pull-right">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+          </ul-->
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <p>
+        Mit diesem Webservice können Sie Literaturlisten aus GBV-Katalogen in
+        verschiedenen Zitationsstilen anzeigen lassen. Die Formatierung basiert
+        auf der <a href="http://citationstyles.org/">Citation Style Language (CSL)</a>.
+      </p>
+    </div>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          <form>
+            <label class="control-label" for="dbkey">Datenbank</label>
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-folder-open"></i></span>
+              <input type="text" id="dbkey" placeholder="dbkey" value="gvk" onchange="updateQuery()">
+            </div>
+            <label class="control-label" for="cql">Anfrage (CQL-Syntax)</label>
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-search"></i></span>
+              <input type="text" id="cql" placeholder="CQL-Anfrage" value="pica.all=Zitat" onchange="updateQuery()">
+            </div>
+            <label class="control-label" for="style">Zitationsstil</label>
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-pencil"></i></span>
+              <input type="text" id="style" placeholder="" value="ieee" onchange="updateStyle()">
+            </div>
+            <label class="control-label" for="language">Sprache</label>
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-flag"></i></span>
+              <input type="text" id="language" placeholder="ISO-Code" value="de-DE" onchange="updateLanguage()">
+            </div>
+          </form>
+          <p>Die Anzahl der Titel ist auf 10 beschränkt.</p>
+        </div>
+        <div class="span9">
+          <h2>Literaturliste</h2>
+          <div id="references">[Page generation failure. The bibliography processor requires a browser with Javascript enabled.]</div>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+       Umgesetzt mit <a href="http://gsl-nagoya-u.net/http/pub/citeproc-doc.html">citeproc-js</a>.
+       Layout basierend auf <a href="http://twitter.github.com/bootstrap/">Bootstrap</a>.
+    </footer>
+  </body>
+</html>

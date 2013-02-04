@@ -1,0 +1,37 @@
+/**
+ * Anpassungen an Twitter Bootstrap CSS für den GBV.
+ */
+
+.navbar-inner {
+    background-color: #577FBB;
+    background-image: none;
+    background-repeat: no-repeat;
+    filter: none;
+    color: white;
+}
+.navbar {
+    padding-bottom: 10px;
+}
+.navbar-inner .container-fluid {
+    height: 85px;
+}
+.navbar .brand {
+    padding: 0px;
+    margin: 19px 20px 0px -22px;
+    width: 128px;
+    height: 64px;
+    background: url(../img/gbvlogo.png) no-repeat left center;
+}
+.navbar h1 {
+    line-height: 75px;
+    margin-bottom: 0px;
+}
+.navbar h1 small {
+    color: white;
+}
+.footer {
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 50px;
+    border-top: 12px solid #6791C9;
+}
