@@ -1,14 +1,14 @@
 <?php
 
-/**
- * cite.php - Citation server
+/************************************
+ * gbv-csl/api.php - Citation server
  *
  * @author Jakob Voss
- * @date   2013-02-04
+ * @date   2013-02-05
  */
 
 /**
- * 
+ * Utility class to extract values from MODS records.
  */
 class MODSMapper {
     private $records;
@@ -35,14 +35,24 @@ class MODSMapper {
         return isset($this->records[$this->position]);
     }
 
-    public function value($query) {
+    public function value($query,$context = null) {
         if (!$this->valid()) return;
         $query = "normalize-space($query)";
-        return $this->xpath->evaluate($query,$this->current());
+        return $this->xpath->evaluate($query, $context ? $context : $this->current());
+    }
+
+    public function nodes($query) {
+        if (!$this->valid()) return;
+        return $this->xpath->query($query,$this->current());
     }
 }
 
-
+/**
+ * Map MODS to JSON for CSL.
+ *
+ * @see http://bibliographie-trac.ub.rub.de/wiki/CiteProc-JS
+ * @see https://github.com/zotero/translators/blob/master/MODS.js 
+ */
 function map_mods_records( $records, $dbkey ) {
     $mapped = array();
     if (!$records or !count($records)) return $mapped;
@@ -70,7 +80,16 @@ function map_mods_records( $records, $dbkey ) {
             )
         );
 
-#        $record[]
+        $authors = array();
+        $anodes = $mapper->nodes('m:name[@type="personal"]');
+        foreach( $anodes as $node ) {
+            $person = array(
+                "family" => $mapper->value('m:namePart[@type="family"]',$node),
+                "given"  => $mapper->value('m:namePart[@type="given"]',$node)
+            );
+            $authors[] = $person;
+        }
+        $record['author'] = $authors;
 
         $edition = $mapper->value('m:originInfo/m:edition');
         if ($edition) {
@@ -92,15 +111,6 @@ function map_mods_records( $records, $dbkey ) {
             $record['publisher-place'] = $place;
         }
 
-        /**
-collection-title
-container-title
-DOI
-event
-genre
-medium = physicalDescription/form
-note   = note
-         */
         $record['id'] = $id;
         $mapped[$id] = $record;
 
@@ -172,29 +182,42 @@ function send_json( $data ) {
 
 $data = null;
 
+if (isset($_GET['list'])) {
+    $list = $_GET['list'];
+    if ($list == "styles") {
+        $files = scandir('./styles');
+        $data["stylenames"] = array();
+        foreach ($files as $file) {
+            if (preg_match('/^(.+)\.csl$/',$file,$match)) {
+                $data["stylenames"][] = $match[1];
+            }
+        }
+        // HACK:
+//        $data["stylenames"] = explode(',',"ieee,ieee-w-url,din-1505-2,din-1505-2-numeric,diplo,tgm-wien-diplom,tah-soz,cell-calcium,cell-numeric,hand,harvard-cardiff-university,harvard-european-archaeology");
+    }
+}
+
+
+////////////////////////////////////////////
+// GET CSL style from CSL style repository
 if (isset($_GET['style'])) {
     $style = $_GET['style'];
-
-    ////////////////////////////////////////////
-    // GET CSL style from CSL style repository
 
     if (!preg_match('/^[a-zA-Z0-9-]+$/', $style)) {
         response_code(400);
     } else if ($xml = @file_get_contents("./styles/$style.csl")) {
         $xml = preg_replace('/^<\?xml.+\n/i','',$xml);
-        $data['style'] = $xml;
+        $data['styles'] = array( $style => $xml );
     } else {
         $data['error']['style'] = 'not found';
         header(':', true, 404);
     }
-
 }
 
+/////////////////////////////////////////////////////////
+// GET citeproc-js locales (from citeproc-js repository)
+
 if(isset($_GET['locale'])) {
-
-    /////////////////////////////////////////////////////////
-    // GET citeproc-js locales (from citeproc-js repository)
-
     $locale = $_GET['locale'];
     if (!preg_match('/^[a-z][a-z](-[A-Z][A-Z])?$/', $locale)) {
         response_code(400);
@@ -206,7 +229,6 @@ if(isset($_GET['locale'])) {
         $data['error']['locale'] = 'not found';
         header(':', true, 404);
     }
-
 }
 
 if(isset($_GET['abbrev'])) {
@@ -216,21 +238,8 @@ if(isset($_GET['abbrev'])) {
 if(isset($_GET['cql'])) {
     $cql   = $_GET['cql'];
     $dbkey = isset($_GET['dbkey']) ? $_GET['dbkey'] : 'gvk';
-
-    // TODO: get via SRU and map MODS to JSON
-    // see http://bibliographie-trac.ub.rub.de/wiki/CiteProc-JS
-    // and https://github.com/zotero/translators/blob/master/MODS.js 
-
-
-    //$dbkey = "opac-de-b1594";
-    //$cql = "pica.all=Geld";
-    //$cql = "pica.gnd=112908071";
     $records = get_mods_via_sru("http://sru.gbv.de/$dbkey",$cql);
     $data['items'] = map_mods_records($records, $dbkey);
-
-//    $data = array('items' => json_decode(file_get_contents("samplecites.json")));
-
-   // TODO: support listing of available styles and locales (typeahead)
 }
 
 send_json($data);
