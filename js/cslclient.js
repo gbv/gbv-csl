@@ -1,18 +1,41 @@
 /**
- * GBVCSL client.
+ * CSLClient JavaScript library.
  * Requires jQuery and citeproc-js.
  * 
  * See <https://github.com/gbv/gbv-csl> for the latest version.
  *
- * @class GBVCSL client
+ * @class CSLClient
  * @author Jakob Voss <voss@gbv.de>
  */
-var GBVCSL = function(args) {
-    this.div = args.div;
-    this.api = args.api;
+var CSLClient = function(args) {
+    this.div   = args.div;
+    this.api   = args.api;
+    this.input = args.input;
+
+    var client = this;
+
+    // enable change handlers
+    if (client.input.dbkey && client.input.cql) {
+        $.each(["dbkey","cql"],function(index,name) {
+            client.input[name].change(function(){
+                client.performQuery({
+                    dbkey: client.input.dbkey.val(),
+                    cql:   client.input.cql.val()
+                });
+            });
+        });
+    }
+
+    $.each(["style","locale"],function(index,name) {
+        client.input[name].change(function(){
+            var args = { };
+            args[name] = client.input[name].val()
+            client.performQuery(args);
+        });
+    });
 };
 
-GBVCSL.prototype = {
+CSLClient.prototype = {
     citeproc: null,
 
     items: [ ],
@@ -46,15 +69,11 @@ GBVCSL.prototype = {
         this.citeproc = new CSL.Engine(
             this, this.styles[this.currentStyle], this.currentLocale
         );
-    },
-
-    html: function(html) {
-        return $('#'+this.div).html(html);
     }
 };
 
 
-GBVCSL.prototype.showBibliography = function() {
+CSLClient.prototype.showBibliography = function() {
     if (!this.citeproc) return;
 
     var sru   = "http://sru.gbv.de/" + $('#dbkey').val() + '?' + $.param({
@@ -74,87 +93,73 @@ GBVCSL.prototype.showBibliography = function() {
     var output = this.citeproc.makeBibliography();
     if (output && output.length && output[1].length){
         var html = output[0].bibstart + output[1].join("") + output[0].bibend;
-        this.html(html).find('.csl-left-margin').each(function(i,v){
+        var div = $('#'+this.div);
+        div.html(html).find('.csl-left-margin').each(function(i,v){
             $(v).wrapInner('<a href="'+output[0].entry_ids[i][0]+'" />');
         });
     }
 };
 
-GBVCSL.prototype.performQuery = function(data) {
-    var oldhtml = this.html();
-    $.each(["style","locale","dbkey","cql"],function(k,v){
-        if(data[v]) $('#'+v).parent().parent().removeClass('error');
+CSLClient.prototype.performQuery = function(data) {
+    var client = this;
+
+    $.each(client.input,function(name,field){
+        if(data[name]) field.parent().parent().removeClass('error');
     });
 
-    this.html("please wait...");
+    var div = $('#'+client.div);
+    div.css({ opacity: 0.2 });
 
-    var me = this;
-    $.ajax(this.api,{data:data}).done(function(response){
+    $.ajax(client.api,{data:data}).done(function(response){
 
-        me.html("please wait a bit more...");
+        div.css({ opacity: 1 });
 
         if (response.stylenames) {
             $('#style').typeahead({source:response.stylenames});
         }
 
         if (response.locales) {
-            me.addLocales( response.locales );
-            me.currentLocale = data.locale;
+            client.addLocales( response.locales );
+            client.currentLocale = data.locale;
         }
         if (response.styles) {
-            me.addStyles(response.styles);
-            me.currentStyle = data.style;
+            client.addStyles(response.styles);
+            client.currentStyle = data.style;
         }
         if (data.locale || data.style) {
-            me.updateEngine();
+            client.updateEngine();
         }
         if (response.items) {
-            me.setItems( response.items );
+            client.setItems( response.items );
         }
-        me.showBibliography();
+        client.showBibliography();
 
     }).fail(function(response){
-        me.html(oldhtml);
-        $.each(["style","locale","dbkey","cql"],function(k,v){
-            if(data[v]) $('#'+v).parent().parent().addClass('error');
+        div.css({ opacity: 1 });
+        $.each(client.input,function(name,field){
+            if(data[name]) field.parent().parent().addClass('error');
         });
     });
 }
 
 //-----------------------------------------------------------------------------
 
-var gbvcsl = new GBVCSL({
-    div: 'references',
-    api: './api'
-});
-
-
-function updateLocale() {
-    gbvcsl.performQuery({ 
-        locale: $('#locale').val() 
-    });
-}
-
-function updateQuery() {
-    gbvcsl.performQuery({
-        dbkey: $('#dbkey').val(),
-        cql:   $('#cql').val()
-    });
-}
-
-function updateStyle() {
-    gbvcsl.performQuery({
-        style: $('#style').val(),
-    });
-}
-
 $(document).ready(function() {
-    gbvcsl.performQuery({ 
-        cql:   $('#cql').val(), 
-        dbkey: $('#dbkey').val(),
-        style: $('#style').val(),
+    (new CSLClient({
+        div: 'references',
+        api: './api',
+        input: {
+            dbkey:  $('#dbkey'),
+            cql:    $('#cql'),
+            locale: $('#locale'),
+            style:  $('#style')
+        }
+    })).performQuery({ 
+        cql:    $('#cql').val(), 
+        dbkey:  $('#dbkey').val(),
+        style:  $('#style').val(),
         locale: $('#locale').val(),
-        abbreviations: 'default',
-        list: "styles"
+        list:   'styles'
     });
 });
+

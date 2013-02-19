@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="./js/jquery-1.9.0.min.js"></script>
 	<script type="text/javascript" src="./js/xmldom.js"></script>
 	<script type="text/javascript" src="./js/citeproc.js"></script>
-	<script type="text/javascript" src="./js/gbv-csl.js"></script>
+	<script type="text/javascript" src="./js/cslclient.js"></script>
     <script type="text/javascript" src="./js/bootstrap.min.js"></script>
   </head>
   <body>
@@ -20,7 +20,7 @@
         <div class="container-fluid">
           <a class="brand" href="https://www.gbv.de/" title="Gemeinsamer Bibliotheksverbund"></a>
           <div class="pull-left" >
-            <h1>CSL&#xA0; <small>Formatierte Literaturlisten</small></h1>
+            <h1>CSL&#xA0; <small>Formatierte Literaturlisten (BETA!)</small></h1>
           </div>
           <!--ul class="nav pull-right">
             <li class="active"><a href="#">Home</a></li>
@@ -35,6 +35,8 @@
         Mit diesem Webservice können Sie Literaturlisten aus GBV-Katalogen in
         verschiedenen Zitationsstilen anzeigen lassen. Die Formatierung basiert
         auf der <a href="http://citationstyles.org/">Citation Style Language (CSL)</a>.
+        Der Webservice befindet sich derzeitin einem frühen Entwicklungstadium und
+        sollte daher nicht in Produktivsystemen verwendet werden.
       </p>
     </div>
     <div class="container-fluid">
@@ -47,14 +49,14 @@
               </label>
               <div class="input-prepend">
                 <span class="add-on"><i class="icon-folder-open"></i></span>
-                <input type="text" id="dbkey" placeholder="dbkey" value="gvk" onchange="updateQuery()">
+                <input type="text" id="dbkey" placeholder="dbkey" value="gvk">
               </div>
             </div>
             <div class="control-group">
               <label class="control-label" for="cql">Anfrage (CQL-Syntax)</label>
               <div class="input-prepend">
                 <span class="add-on"><i class="icon-search"></i></span>
-                <input type="text" id="cql" placeholder="CQL-Anfrage" value="pica.all=Liebe" onchange="updateQuery()">
+                <input type="text" id="cql" placeholder="CQL-Anfrage" value="pica.all=Liebe">
               </div>
               </div>
             <div class="control-group">
@@ -63,14 +65,14 @@
               </label>
               <div class="input-prepend">
                 <span class="add-on"><i class="icon-pencil"></i></span>
-                <input type="text" id="style" data-provide="typeahead" value="ieee" onchange="updateStyle()">
+                <input type="text" id="style" data-provide="typeahead" value="ieee"> 
               </div>
               </div>
             <div class="control-group">
               <label class="control-label" for="locale">Sprache</label>
               <div class="input-prepend">
                 <span class="add-on"><i class="icon-flag"></i></span>
-                <input type="text" id="locale" placeholder="ISO-Code" value="de-DE" onchange="updateLocale()">
+                <input type="text" id="locale" placeholder="ISO-Code" value="de-DE">
               </div>
             </div>
           </form>
@@ -131,7 +133,7 @@
           Die Formatierung der Literaturangaben in dem gewählten Zitationsstil erfolgt Client-seitig
           in JavaScript mit dem CSL-Prozessor <a href="http://gsl-nagoya-u.net/http/pub/citeproc-doc.html">citeproc-js</a>.
           Zur Abfrage der GBC-CSL-API und zum Ansteuern von citeproc-js wird eine 
-          <a href="./js/gbv-csl.js">eigene JavaScript-Bibliothek</a> verwendet.
+          <a href="./js/cslclient.js">eigene JavaScript-Bibliothek</a> verwendet.
         </p>
         <p>
           Der Quellcode für Server- und Client-Komponente ist unter
