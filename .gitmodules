@@ -4,3 +4,6 @@
 [submodule "locales"]
 	path = locales
 	url = git://github.com/citation-style-language/locales.git
+[submodule "citeproc-php"]
+	path = citeproc-php
+	url = ./citeproc-php

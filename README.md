@@ -29,13 +29,17 @@ AGLP. Bugfixes and extensions are very welcome! Issues are tracked at
 Clone this repository into a directory of your choice and update submodules:
 
     git clone git://github.com/gbv/gbv-csl.git
-    git submodule update --init
+    git submodule update --init styles locales
 
 This will download the official CSL citation style repository and standard CSL
 locale files into folder `styles` and `locales`, respectively.
 
-Put the directory at a webserver with PHP >= 5.3 and open in your browser.
+To enable server-side processing with citeproc-php, you need git-hg:
 
+    rmdir citeproc-php
+    git-hg clone https://bitbucket.org/rjerome/citeproc-php citeproc-php
+
+Then put the directory at a webserver with PHP >= 5.3 and open in your browser.
 
 # Copyright and license
 

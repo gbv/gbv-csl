@@ -192,8 +192,6 @@ if (isset($_GET['list'])) {
                 $data["stylenames"][] = $match[1];
             }
         }
-        // HACK:
-//        $data["stylenames"] = explode(',',"ieee,ieee-w-url,din-1505-2,din-1505-2-numeric,diplo,tgm-wien-diplom,tah-soz,cell-calcium,cell-numeric,hand,harvard-cardiff-university,harvard-european-archaeology");
     }
 }
 
@@ -231,15 +229,19 @@ if(isset($_GET['locale'])) {
     }
 }
 
-if(isset($_GET['abbrev'])) {
-    // TODO
-}
-
 if(isset($_GET['cql'])) {
     $cql   = $_GET['cql'];
     $dbkey = isset($_GET['dbkey']) ? $_GET['dbkey'] : 'gvk';
     $records = get_mods_via_sru("http://sru.gbv.de/$dbkey",$cql);
     $data['items'] = map_mods_records($records, $dbkey);
+
+/*
+    $file = "citeproc-php/CiteProc.php";
+    if ($_GET['process'] && file_exists($file)) {
+        include $file;
+        // TODO: Serverseitig
+    }
+*/
 }
 
 send_json($data);
