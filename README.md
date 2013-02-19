@@ -1,5 +1,29 @@
 # GBV-CSL
 
+This repository contains 
+
+* an API to query bibliographic databases from GBV and return the results in a
+  JSON structure appropriate to be formatted with [Citation Style Language](
+  http://citationstyles.org/) (CSL).
+
+* an API to get CSL styles and locales, packed in JSON for processing with
+  [citeproc-js](http://gsl-nagoya-u.net/http/pub/citeproc-doc.html) in a 
+  client browser.
+
+* a web application that makes use of the APIs to search and display list of
+  citations (bibliographic references).
+
+A public beta-version of this service for testing, feedback, a development, is
+available at <http://ws.gbv.de/csl/>. The source code is available in GitHub at
+
+* https://github.com/gbv/gbv-csl
+
+Feel free to clone the repository for testing and reuse under the terms of
+AGLP. Bugfixes and extensions are very welcome! Issues are tracked at
+
+* https://github.com/gbv/gbv-csl/issues
+
+
 # Installation
 
 Clone this repository into a directory of your choice and update submodules:
@@ -12,18 +36,14 @@ locale files into folder `styles` and `locales`, respectively.
 
 Put the directory at a webserver with PHP >= 5.3 and open in your browser.
 
-# TODO
-
-* Abbreviations are not supported yet.
-* Better error detection is needed.
-* Improve the MODS to CSL mapping.
-* Document the JavaScript API.
 
 # Copyright and license
 
 Copyright 2013 Verbundzentrale des GBV (VZG)
 
-Licensed under the [GNU Affero General Public License](http://www.gnu.org/licenses/agpl-3.0.html) (AGPL).
+Licensed under the [GNU Affero General Public
+License](http://www.gnu.org/licenses/agpl-3.0.html) (AGPL).
 
-Contains parts of Twitter Bootstrap, originally licensed under the Apache License, Version 2.0.
+Contains parts of [Twitter Bootstrap](http://twitter.github.com/bootstrap/),
+originally licensed under the Apache License, Version 2.0.
 
