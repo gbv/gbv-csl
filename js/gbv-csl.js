@@ -125,7 +125,7 @@ GBVCSL.prototype.performQuery = function(data) {
 
 var gbvcsl = new GBVCSL({
     div: 'references',
-    api: './api.php'
+    api: './api'
 });
 
 
