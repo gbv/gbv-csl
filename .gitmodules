@@ -6,4 +6,4 @@
 	url = git://github.com/citation-style-language/locales.git
 [submodule "citeproc-php"]
 	path = citeproc-php
-	url = ./citeproc-php
+	url = git://github.com/gbv/citeproc-php.git
