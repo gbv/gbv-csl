@@ -1,0 +1,15 @@
+RewriteEngine On
+
+# Serve index.php as '/' and api.php as '/api'
+DirectoryIndex index.php
+RewriteRule ^(api)$ $1.php [L]
+
+# Disallow all PHP files but api.php
+RewriteCond %{THE_REQUEST} ^GET\s.+\.php [NC]
+RewriteCond %{THE_REQUEST} !api\.php [NC]
+RewriteRule . - [F]
+
+# Disallow access to subdirectories
+<IfModule mod_alias.c>
+RedirectMatch 403 ^.*/(locales|styles|tests|citeproc-php|.git)(.*)?$
+</IfModule>
