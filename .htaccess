@@ -1,15 +1,18 @@
 RewriteEngine On
 
-# Serve index.php as '/' and api.php as '/api'
+# Serve index.php as '/' 
 DirectoryIndex index.php
-RewriteRule ^(api)$ $1.php [L]
 
-# Disallow all PHP files but api.php
+# Serve /foo as api?dbkey=foo
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*/)?([^/]+)$ api.php?dbkey=$2 [L,QSA]
+
+# Disallow all PHP files
 RewriteCond %{THE_REQUEST} ^GET\s.+\.php [NC]
-RewriteCond %{THE_REQUEST} !api\.php [NC]
 RewriteRule . - [F]
 
-# Disallow access to subdirectories
+# Disallow access to non-public subdirectories
 <IfModule mod_alias.c>
 RedirectMatch 403 ^.*/(locales|styles|tests|citeproc-php|.git)(.*)?$
 </IfModule>

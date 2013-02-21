@@ -15,12 +15,12 @@ var CSLClient = function(args) {
     var client = this;
 
     // enable change handlers
-    if (client.input.dbkey && client.input.cql) {
-        $.each(["dbkey","cql"],function(index,name) {
+    if (client.input.dbkey && client.input.query) {
+        $.each(["dbkey","query"],function(index,name) {
             client.input[name].change(function(){
                 client.performQuery({
                     dbkey: client.input.dbkey.val(),
-                    cql:   client.input.cql.val()
+                    query: client.input.query.val()
                 });
             });
         });
@@ -82,7 +82,7 @@ CSLClient.prototype.showBibliography = function() {
         operation: 'searchRetrieve',
         startRecord: 1,
         maximumRecords: 10,
-        query: $('#cql').val()
+        query: $('#query').val()
     });
     $("#sru").attr('href',sru).show();
 
@@ -110,6 +110,11 @@ CSLClient.prototype.performQuery = function(data) {
     var div = $('#'+client.div);
     div.css({ opacity: 0.2 });
 
+	var url = client.api;
+	if (data.dbkey) {
+		client.api += "/" + data.dbkey;
+		delete data.dbkey;
+	}
     $.ajax(client.api,{data:data}).done(function(response){
 
         div.css({ opacity: 1 });
@@ -150,12 +155,12 @@ $(document).ready(function() {
         api: './api',
         input: {
             dbkey:  $('#dbkey'),
-            cql:    $('#cql'),
+            query:  $('#query'),
             locale: $('#locale'),
             style:  $('#style')
         }
     })).performQuery({ 
-        cql:    $('#cql').val(), 
+        query:  $('#query').val(), 
         dbkey:  $('#dbkey').val(),
         style:  $('#style').val(),
         locale: $('#locale').val(),

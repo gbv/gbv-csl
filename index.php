@@ -35,7 +35,7 @@
         Mit diesem Webservice können Sie Literaturlisten aus GBV-Katalogen in
         verschiedenen Zitationsstilen anzeigen lassen. Die Formatierung basiert
         auf der <a href="http://citationstyles.org/">Citation Style Language (CSL)</a>.
-        Der Webservice befindet sich derzeitin einem frühen Entwicklungstadium und
+        Der Webservice befindet sich derzeit in einem frühen Entwicklungstadium und
         sollte daher nicht in Produktivsystemen verwendet werden.
       </p>
     </div>
@@ -53,10 +53,10 @@
               </div>
             </div>
             <div class="control-group">
-              <label class="control-label" for="cql">Anfrage (CQL-Syntax)</label>
+              <label class="control-label" for="query">Anfrage (CQL-Syntax)</label>
               <div class="input-prepend">
                 <span class="add-on"><i class="icon-search"></i></span>
-                <input type="text" id="cql" placeholder="CQL-Anfrage" value="pica.all=Liebe">
+                <input type="text" id="query" placeholder="CQL-Anfrage" value="pica.all=Liebe">
               </div>
               </div>
             <div class="control-group">
@@ -91,16 +91,16 @@
         <hr>
         <h2>API</h2>
         <p>
-          Die JSON-API unter <a href="./api">api</a> unterstützt folgende Parameter und liefert ein JSON-Objekt.
+		  Für Datenbanken mit SRU-Schnittstelle unter sru.gbv.de gibt es jeweils
+		  eine JSON-API unter <code>/{dbkey}</code>, z.B.
+		  <a href="./gvk">/gvk</a> für den GVK. Folgende Parameter werden unterstützt:
         </p>
       </div>
       <div class="row-fluid">
         <div class="span6">
           <h3>Anfrage-Parameter</h3>
             <dl>
-              <dt>dbkey</dt>
-              <dd>Datenbank-Kürzel</dd>
-              <dt>cql</dt>
+              <dt>query</dt>
               <dd>CQL-Abfrage</dd>
               <dt>style</dt>
               <dd>Zitationsstil</dd>
