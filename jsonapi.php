@@ -58,7 +58,12 @@ class JSON_API {
 		} else {
 			header('Content-type: application/json; charset=utf-8');
 			header('access-control-allow-origin: *');
-			echo json_encode($this->response, JSON_PRETTY_PRINT);
+            if ( version_compare(PHP_VERSION, '5.4.0') >= 0) {
+    			$json = json_encode($this->response, JSON_PRETTY_PRINT);
+            } else {
+    			$json = json_encode($this->response);
+            }
+            echo $json;
 		}
 	}
 }

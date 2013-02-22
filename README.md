@@ -35,13 +35,14 @@ This will download the official CSL citation style repository and standard CSL
 locale files into folder `styles` and `locales`, respectively, and a mirror of
 citeproc-php into folder `citeproc-php`.
 
-Then put the directory at an Apache webserver with PHP >= 5.3 and open in your
-browser. On Ubuntu, one can install the required modules via:
+Then put the directory at an Apache webserver with PHP >= 5.3. On Ubuntu, one
+can install the required modules via: 
 
     sudo apt-get install apache2 libapache2-mod-php5
 
 Apache module `rewrite` must be enabled and module `alias` should be enabled.
 
+Finally, one may need to adjust `RewriteBase` in `.htaccess`.
 
 # Copyright and license
 

@@ -111,8 +111,8 @@
               <dd>Spracheinstellungen</dd>
               <dt>list=styles</dt>
               <dd>Verfügbare Zitationsstile</dd>
-              <dd>items</dd>
-              <dt>Ausgabeformat (Standard: <code>input</code>)
+              <dt>items</dt>
+              <dd>Ausgabeformat (Standard: <code>input</code>)</dd>
               <dt>callback</dt>
               <dd>JavaScript-Callback für JSONP</dd>
             </dl>
