@@ -14,5 +14,5 @@ RewriteRule . - [F]
 
 # Disallow access to non-public subdirectories
 <IfModule mod_alias.c>
-RedirectMatch 403 ^.*/(locales|styles|tests|citeproc-php|.git)(.*)?$
+RedirectMatch 403 ^.*/(locales|styles|t|citeproc-php|.git)(.*)?$
 </IfModule>

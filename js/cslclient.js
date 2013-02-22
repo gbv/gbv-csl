@@ -38,19 +38,16 @@ var CSLClient = function(args) {
 CSLClient.prototype = {
     citeproc: null,
 
-    items: [ ],
+    items: { },
     setItems: function(items) {
-        this.items = { };
-        for (var id in items) {
-            this.items[id] = items[id];
-        }
+		this.items = items;
     },
 
     locales: { },
     currentLocale: null,
     addLocales: function(locales) {
         for (var lang in locales) {
-            this.locales[lang] = locales[lang];
+            this.locales[lang] = locales[lang].replace(/<\?xml .*\?>/i, '');
         }
     },
 
@@ -58,12 +55,16 @@ CSLClient.prototype = {
     currentStyle: null,
     addStyles: function(styles) {
         for (var style in styles) {
-            this.styles[style] = styles[style];
+            this.styles[style] = styles[style].replace(/<\?xml .*\?>/i, '');
         }
     },
 
-    retrieveItem: function(id) { return this.items[id]; },
-    retrieveLocale: function(lang) { return this.locales[lang]; },
+    retrieveItem: function(id) { 
+		return this.items[id].input; 
+	},
+    retrieveLocale: function(lang) {
+		return this.locales[lang]; 
+	},
 
     updateEngine: function() {
         this.citeproc = new CSL.Engine(
@@ -76,7 +77,7 @@ CSLClient.prototype = {
 CSLClient.prototype.showBibliography = function() {
     if (!this.citeproc) return;
 
-    var sru   = "http://sru.gbv.de/" + $('#dbkey').val() + '?' + $.param({
+    var sru = "http://sru.gbv.de/" + $('#dbkey').val() + '?' + $.param({
         recordSchema: 'mods',
         version: '1.1',
         operation: 'searchRetrieve',
@@ -86,11 +87,22 @@ CSLClient.prototype.showBibliography = function() {
     });
     $("#sru").attr('href',sru).show();
 
+	var api = this.api + $('#dbkey').val() + '?' + $.param({
+        query: $('#query').val()
+	});
+    $("#api").attr('href',api).show();
+
     var ids = [];
     for(var id in this.items) ids.push(id);
     this.citeproc.updateItems(ids);
 
-    var output = this.citeproc.makeBibliography();
+    var output = null;
+	try { 
+		output = this.citeproc.makeBibliography();
+	} catch(e) { // ERROR
+        var div = $('#'+this.div);
+		div.html(""+e);
+	}
     if (output && output.length && output[1].length){
         var html = output[0].bibstart + output[1].join("") + output[0].bibend;
         var div = $('#'+this.div);
@@ -112,10 +124,10 @@ CSLClient.prototype.performQuery = function(data) {
 
 	var url = client.api;
 	if (data.dbkey) {
-		client.api += "/" + data.dbkey;
+		url += "/" + data.dbkey;
 		delete data.dbkey;
 	}
-    $.ajax(client.api,{data:data}).done(function(response){
+    $.ajax(url,{data:data}).done(function(response){
 
         div.css({ opacity: 1 });
 
@@ -152,7 +164,7 @@ CSLClient.prototype.performQuery = function(data) {
 $(document).ready(function() {
     (new CSLClient({
         div: 'references',
-        api: './api',
+        api: './',
         input: {
             dbkey:  $('#dbkey'),
             query:  $('#query'),

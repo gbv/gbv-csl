@@ -83,7 +83,10 @@
           </p>
         </div>
         <div class="span9">
-          <h2>Literaturliste <small><a href="#" id="sru" style="display:none">via SRU</a></small></h2>
+		  <h2>Literaturliste 
+            <small><a href="#" id="sru" style="display:none">via SRU</a></small>
+            <small><a href="#" id="api" style="display:none">via CSL-API</a></small>
+          </h2>
           <div id="references">[Page generation failure. The bibliography processor requires a browser with Javascript enabled.]</div>
         </div>
       </div>
@@ -108,6 +111,8 @@
               <dd>Spracheinstellungen</dd>
               <dt>list=styles</dt>
               <dd>Verfügbare Zitationsstile</dd>
+              <dd>items</dd>
+              <dt>Ausgabeformat (Standard: <code>input</code>)
               <dt>callback</dt>
               <dd>JavaScript-Callback für JSONP</dd>
             </dl>

@@ -1,139 +1,151 @@
 <?php
 
-class CSLAPI {
+include_once 'jsonapi.php';
+include_once 'gbvsru.php';
 
-	// query
-	private $callback;
-	private $list = array();
-	private $style;
-	private $locale;
-	private $dbkey;
-	private $query;
+include_once 'modstransformer.php';
+include_once 'citeproc-php/CiteProc.php';
 
-	// response (public)
-	public $stylenames;
-	public $styles;
-	public $locales;
-	public $items;
+function arrayToObject($array) {
+	if (!is_array($array)) return $array;
 
-	// response (private)
-	private $response = array();
-	private $errormessage;
-	private $status = 200;
-
-
-	public function __construct( $args = NULL ) {
-		$this->process_args( $args !== NULL ? $args : $_GET );
+	$is_obj = 0;
+	$obj = new stdClass();
+	foreach( $array as $name => $value ) {
+		if (!preg_match('/^\d+$/',$name)) {
+			$is_obj = 1;
+		}
+		$obj->$name = arrayToObject($value);
 	}
+	return $is_obj ? $obj : $array;
+}
 
-	private function process_args( $args ) {
 
-		if ( isset($args['callback']) ) {
-			if (preg_match('/^[a-zA-Z0-9_]+$/', $args['callback'])) {
-				$this->callback = $args['callback'];
-			} else {
-				$this->error('invalid callback');
-			}
-		}
-		
-		if ( isset($args['style']) ) {
-		    if (preg_match('/^[a-zA-Z0-9-]+$/', $args['style'])) {
-				$this->style = $args['style'];
-			} else {
-		        $this->error("invalid style name");
-			}
-		}
+class CSL_API extends JSON_API {
 
-		if ( isset($args['locale']) ) {
-    		if (preg_match('/^[a-z][a-z](-[A-Z][A-Z])?$/', $args['locale'])) {
-				$this->locale = $args['locale'];
-			} else {
-		        $this->error("invalid locale name");
-			}
-		}
+	protected static $parameters = array(
+		'callback' => '^[a-zA-Z0-9_]+$',
+		'style'    => '^[a-zA-Z0-9-]+$',
+		'locale'   => '^[a-z][a-z](-[A-Z][A-Z])?$',
+		'dbkey'    => '^[a-z][a-z0-9]*(-[a-z0-9]+)*$',
+		'query'    => '.*',
+		'list'     => '^([a-z]+(,[a-z]+)*)?$',
+		'items'    => '^([a-z]+(,[a-z]+)*)?$'
+	);
 
-		if ( isset($args['list']) ) {
-			$this->list = explode(',',$args['list']);
-		}
+	protected function process_args() {
+		$req = $this->request;
 
-		if ( isset($args['query']) or isset($args['dbkey']) ) {
-			if (!isset($args['query'])) {
+		$req->list  = isset($req->list) ? explode(',',$req->list) : array();
+		$req->items = isset($req->items) ? explode(',',$req->items) : array('input');
+
+		if ( isset($req->query) || isset($req->dbkey) ) {
+			if ( !isset($req->query) ) {
 				$this->error('missing query parameter');
-			} else if (!isset($args['dbkey'])) {
+				unset($req->query);
+			} else if ( !isset($req->dbkey) ) {
 				$this->error('missing dbkey parameter');
-			} else {
-				$this->query = $args['query'];
-				$this->dbkey = $args['dbkey'];
+				unset($req->dbkey);
 			}
 		}
 	}
 
-	public function __get($name) {
-		switch($name) {
-			case 'list_styles':
-				return in_array('styles',$this->list);
-			case 'get_style':
-				return $this->style;
-			case 'get_locale':
-				return $this->locale;
-			case 'get_dbkey':
-				return $this->dbkey;
-			case 'get_query':
-				return $this->query;
-			default:
-				return NULL;
+	public $registry;
+	public $transformer;
+
+	public function process( ) {
+		$req = $this->request;
+
+		if ( isset($req->style) ) {
+			if ( $xml = $this->registry->get_style_xml( $req->style ) ) {
+				$this->response->styles = (object) array( $req->style => $xml );
+			} else {
+				$this->error("style not found",404);
+			}
+		}
+
+		if ( isset($req->locale) ) {
+			if ( $xml = $this->registry->get_locale_xml( $req->locale ) ) {
+				$this->response->locales = (object) array( ($req->locale) => $xml );
+			} else {
+				$this->error('locale not found',404);
+			}
+		}
+
+		if ( in_array('styles',$req->list) ) {
+			$this->response->stylenames = $this->registry->list_styles();
+		}
+
+		if ( isset( $req->query ) ) {
+			$this->process_items();
 		}
 	}
 
-	public function error( $message, $status = NULL ) {
-		if (!$this->errormessage) {
-			$this->errormessage = $message;
-			$this->status = $status !== NULL ? $status : 400;
-		}
-	}
+	private function process_items() {
+		$req = $this->request;
 
-	public function process() {
-		if ($this->styles) {
-			$this->response["styles"] = $this->styles;
-		}
-		if ($this->stylenames) {
-			$this->response["stylenames"] = $this->stylenames;
-		}
-		if ($this->locales) {
-			$this->response["locales"] = $this->locales;
-		}
-		if ($this->items) {
-			$this->response["items"] = $this->items;
-		}
-	}
+		$items = array();
 
-	/**
-	 * Send API response.
-	 */
-	public function respond() {
-		$this->send_json($this->response, $this->status);
-	}
+		$dbkey = $req->dbkey;
+		$query = $req->query;
 
-	/**
-	 * Serialize and send JSON or JSONP with given HTTP status.
-	 */
-	public function send_json( $response, $status ) {
-		if (!$response) $response = array();
+		$mods_records = get_mods_via_sru("http://sru.gbv.de/$dbkey",$query);
 
-		$protocol = isset($_SERVER['SERVER_PROTOCOL']) ? 
-			        $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
-	    header("$protocol $status");
-		$response['status'] = $status;
+		if (in_array('mods',$req->items)) {
+			$mapper = new MODS_Mapper( $mods_records );
+			while( $mapper->valid() ) {
+				$ppn = $mapper->value('m:recordInfo/m:recordIdentifier[@source="DE-601"]');
+				$id  = "http://uri.gbv.de/document/$dbkey:ppn:$ppn";
+				$xml = $mapper->current();
+				if (!isset($items[$id])) $items[$id] = new stdClass();
+				$items[$id]->mods = $xml->ownerDocument->saveXML($xml);
+				$mapper->next();
+			}
+		}	
 
-		if ($this->callback) {
-			header('Content-Type: text/javascript; charset=utf-8');
-			header('access-control-allow-origin: *');
-			echo $this->callback . '(' . json_encode($response) . ')';
-		} else {
-			header('Content-type: application/json; charset=utf-8');
-			header('access-control-allow-origin: *');
-			echo json_encode($response);
+		if (in_array('input',$req->items) || in_array('html',$req->items)) {
+			$input_records = $this->transformer->transform($mods_records, $dbkey);
+	
+			foreach ($input_records as $id => $input) {
+				$input_records[$id] = arrayToObject($input);
+			}
+
+			if (in_array('input',$req->items)) {
+				foreach ($input_records as $id => $input) {
+					if (!isset($items[$id])) $items[$id] = new stdClass();
+					$items[$id]->input = $input;
+				}
+			}
 		}
+
+		if (in_array('html',$req->items)) {
+
+			$csl = null; 
+			if ( isset($req->style) ) {
+				$style = $req->style;
+				$csl = $this->response->styles->$style;
+			} else {
+				$this->error('missing parameter style');
+			}
+
+			if ($csl) {
+				if (!in_array('input',$req->items)) {
+					unset($this->response->styles);
+				} 
+
+				$citeproc = new citeproc($csl);
+
+				foreach($input_records as $id => $input) {
+					if (!isset($items[$id])) $items[$id] = new stdClass();
+					$html = $citeproc->render($input, 'bibliography');
+					$html = preg_replace('/^<div class="csl-bib-body">(.*)<\/div>$/', '$1', $html);
+					$items[$id]->html = $html;
+				}
+
+			}
+		}
+
+		$this->response->items = $items;
 	}
 }
 

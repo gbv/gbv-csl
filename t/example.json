@@ -1,0 +1,21 @@
+{
+	"style": "unisa-harvard",
+    "input": [
+        {
+			"title": "Abrüstungsvorhaben und Rüstungskontrolle im Europa der Zwischenkriegszeit",
+            "author": [
+                {
+                    "family": "Radke", 
+                    "given": "Winifred"
+                }
+            ], 
+			"issued": { "date-parts": [ [2013] ] },
+            "type": "book",
+			"edition": "1. Aufl.",
+		    "publisher": "GRIN Verlag",
+			"publisher-place" :"s.l.]",
+			"id": "http://uri.gbv.de/document/gvk:ppn:CIANDO735936021"
+        }
+    ], 
+    "result": "<div class=\"csl-entry\">Radke, W 2013, <span style=\"font-style: italic;\" >Abrüstungsvorhaben und Rüstungskontrolle im Europa der Zwischenkriegszeit</span>, 1. Aufl.st edn, GRIN Verlag, s.l.].</div>"
+}

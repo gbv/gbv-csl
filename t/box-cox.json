@@ -1,0 +1,26 @@
+{			
+	"input": [ {
+		"type": "book",
+		"title": "Does the Box-Cox transformation help in forecasting macroeconomic time series?",
+		"issued": {
+			"date-parts": [
+				[
+					2013
+				]
+			]
+		},
+		"author": [
+			{
+				"family": "Proietti",
+				"given": "Tommaso"
+			},
+			{
+				"family": "L\u00fctkepohl",
+				"given": "Helmut"
+			}
+		],
+		"id": "http:\/\/uri.gbv.de\/document\/gvk:ppn:736535780"
+	} ],
+	"style": "diplo",
+	"result": "<div class=\"csl-entry\">Proietti T and Lütkepohl H (2013) <span style=\"font-style: italic;\" >Does the Box-Cox transformation help in forecasting macroeconomic time series?</span>.</div>"
+}
