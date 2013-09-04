@@ -1,6 +1,6 @@
 <?php
     class risToCsl_Mapper {
-    	public function __construct () {
+    	function __construct () {
 	}
 	
 	public function risToCsl ( $risArr, $debug ) {
@@ -37,7 +37,7 @@
 		++ CY  -	City
 	    DB  -	Name of Database
 	    DO  -	DOI
-	    DP  -	Database Provider
+		++ DP  -	Database Provider (not available in gso)
 	    ET  -	Edition
 		++ EP -	Ending page number
 	    J2  -	Abbreviation
@@ -151,6 +151,9 @@
 	    // T2 --> Titel
 	    array_push($titles, $risArr['T2'][0]);
 	    unset($risArr['T2']);	
+	    
+	    // T3 --> Titel
+	    array_push($titles, $risArr['T3'][0]);
 	    
 	    $titles = array_filter($titles);
 	    $cslRecord['title'] = implode('. ', $titles);	    

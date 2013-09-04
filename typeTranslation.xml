@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<types>
+	<type notation="ABST">
+		<term lang="en">Abstract</term>
+		<term lang="de">Aufsatz</term>
+	</type>
+	<type notation="ADVS">
+		<term lang="en">Audiovisual material</term>
+		<term lang="de">Audiovisuelle Medien</term>
+	</type>
+	<type notation="ART">
+		<term lang="en">Art Work</term>
+		<term lang="de">Kunst</term>
+	</type>
+	<type notation="BILL">
+		<term lang="en">Bill/Resolution</term>
+		<term lang="de">Gesetz / Beschluss</term>
+	</type>
+	<type notation="BOOK">
+		<term lang="en">Book, Whole</term>
+		<term lang="de">Buch</term>
+	</type>
+	<type notation="CASE">
+		<term lang="en">Case</term>
+		<term lang="de">Fall (Gericht)</term>
+	</type>
+	<type notation="CHAP">
+		<term lang="en">Book chapter</term>
+		<term lang="de">Kapitel (Buch)</term>
+	</type>
+	<type notation="COMP">
+		<term lang="en">Computer program</term>
+		<term lang="de">Software</term>
+	</type>
+	<type notation="CONF">
+		<term lang="en">Conference proceeding</term>
+		<term lang="de">Tagungsbericht</term>
+	</type>
+	<type notation="CTLG">
+		<term lang="en">Catalog</term>
+		<term lang="de">Katalog</term>
+	</type>
+	<type notation="DATA">
+		<term lang="en">Data file</term>
+		<term lang="de">Datei</term>
+	</type>
+	<type notation="ELEC">
+		<term lang="en">Electronic Citation</term>
+		<term lang="de">Elektronisches Ressource</term>
+	</type>
+	<type notation="GEN">
+		<term lang="en">Generic</term>
+		<term lang="de">Allgemein</term>
+	</type>
+	<type notation="HEAR">
+		<term lang="en">Hearing</term>
+		<term lang="de">Anhörung</term>
+	</type>
+	<type notation="ICOMM">
+		<term lang="en">Internet Communication</term>
+		<term lang="de">Internet-Kommunikation</term>
+	</type>
+	<type notation="INPR">
+		<term lang="en">In Press</term>
+		<term lang="de">Siehe auch</term>
+	</type>
+	<type notation="JFULL">
+		<term lang="en">Journal (full)</term>
+		<term lang="de">Zeitschrift (ganz)</term>
+	</type>
+	<type notation="JOUR">
+		<term lang="en">Journal</term>
+		<term lang="de">Zeitschrift</term>
+	</type>
+	<type notation="MAP">
+		<term lang="en">Map</term>
+		<term lang="de">Karte</term>
+	</type>
+	<type notation="MGZN">
+		<term lang="en">Magazine article</term>
+		<term lang="de">Zeitschriftenartikel</term>
+	</type>
+	<type notation="MPCT">
+		<term lang="en">Motion picture</term>
+		<term lang="de">Film</term>
+	</type>
+	<type notation="MUSIC">
+		<term lang="en">Music score</term>
+		<term lang="de">Musik</term>
+	</type>
+	<type notation="NEWS">
+		<term lang="en">Newspaper</term>
+		<term lang="de">Zeitung</term>
+	</type>
+	<type notation="PAMP">
+		<term lang="en">Pamphlet</term>
+		<term lang="de">Pamphlet</term>
+	</type>
+	<type notation="PAT">
+		<term lang="en">Patent</term>
+		<term lang="de">Patent</term>
+	</type>
+	<type notation="PCOMM">
+		<term lang="en">Personal communication</term>
+		<term lang="de">Persönliche Kommunikation</term>
+	</type>
+	<type notation="RPRT">
+		<term lang="en">Report</term>
+		<term lang="de">Report</term>
+	</type>
+	<type notation="SER">
+		<term lang="en">Serial (Book, Monograph)</term>
+		<term lang="de">Serie (Buch, Monographie)</term>
+	</type>
+	<type notation="SLIDE">
+		<term lang="en">Slide</term>
+		<term lang="de">Folie / Dia</term>
+	</type>
+	<type notation="SOUND">
+		<term lang="en">Sound recording</term>
+		<term lang="de">Tonaufnahme</term>
+	</type>
+	<type notation="STAT">
+		<term lang="en">Statute</term>
+		<term lang="de">Gesetz / Satzung / Statut</term>
+	</type>
+	<type notation="THES">
+		<term lang="en">Thesis/Dissertation</term>
+		<term lang="de">Diplomarbeit</term>
+	</type>
+	<type notation="THESIS">
+		<term lang="en">Thesis/Dissertation</term>
+		<term lang="de">Diplomarbeit</term>
+	</type>	
+	<type notation="UNBILL">
+		<term lang="en">Unenacted bill/resolution</term>
+		<term lang="de">Verordnung / Resolution</term>
+	</type>
+	<type notation="UNPB">
+		<term lang="en">Unpublished work</term>
+		<term lang="de">Unveröffentlichtes Werk</term>
+	</type>
+	<type notation="VIDEO">
+		<term lang="en">Video recording</term>
+		<term lang="de">Videoaufnahme</term>
+	</type>
+</types>
