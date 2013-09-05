@@ -38,7 +38,7 @@
 	    DB  -	Name of Database
 	    DO  -	DOI
 		++ DP  -	Database Provider (not available in gso)
-	    ET  -	Edition
+		++ ET  -	Edition
 		++ EP -	Ending page number
 	    J2  -	Abbreviation
 		++ KW  -	Keywords
@@ -46,7 +46,7 @@
 		++ IS - 	Issue number
 	    L1  -	File Attachments
 	    L4  -	Figure
-	    LA  -	Language
+		++ LA  -	Language
 	    LB  -	Label
 	    M1  -	Number
 	    M3  - 	Type of Work
@@ -164,8 +164,16 @@
 	    
 	    // JF (Periodical full name) --> container-title
 	    $cslRecord['container-title'] = $risArr['JF'][0];	
-	    unset($risArr['JF']);		    
+	    unset($risArr['JF']);		  
 	    
+	    // ET (Edition) --> container-title
+	    $cslRecord['edition'] = $risArr['ET'][0];	
+	    unset($risArr['ET']);	        
+
+	    // LA (language) --> language
+	    $cslRecord['language'] = $risArr['LA']0];	
+	    unset($risArr['LA']);		    
+		    	    
 	    // TY --> Type
 	    $cslRecord['type'] = $risArr['TY'][0];
 	    unset($risArr['TY']);
