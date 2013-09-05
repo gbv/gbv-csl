@@ -171,7 +171,7 @@
 	    unset($risArr['ET']);	        
 
 	    // LA (language) --> language
-	    $cslRecord['language'] = $risArr['LA']0];	
+	    $cslRecord['language'] = $risArr['LA'][0];	
 	    unset($risArr['LA']);		    
 		    	    
 	    // TY --> Type
