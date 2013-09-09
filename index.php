@@ -66,37 +66,37 @@
 	}
 	
 	// parse $_GET-Parameters
-	public function init($_GET) {
+	public function init($get) {
     	    
 	    $error = 0;
 	    $errorMessages = '';
 		
-	    // if not $_GET
-	    if (!$_GET) {
+	    // if not $get
+	    if (!$get) {
 	    	header('Content-Type: text/html; charset=utf8');
 	    	include("doku.php");
 	    	return 0;
 	    }
 		
 	    // debug
-	    if (isset($_GET['debug']) && $_GET['debug'] == 1) {
-		$this->debug = strip_tags($_GET['debug']);
+	    if (isset($get['debug']) && $get['debug'] == 1) {
+		$this->debug = strip_tags($get['debug']);
 	    }
 	    else {
 		$this->debug = 0;
 	    }	
 		
 	    // database
-	    if (isset($_GET['database']) && $_GET['database'] != '') {
-		$this->database = strip_tags($_GET['database']);
+	    if (isset($get['database']) && $get['database'] != '') {
+		$this->database = strip_tags($get['database']);
 	    }
 	    else {
 		$this->database = 'gvk';
 	    }	
 
 	    // query
-	    if (isset($_GET['query']) && $_GET['query'] != '') {
-		$this->query = urlencode(strip_tags($_GET['query']));
+	    if (isset($get['query']) && $get['query'] != '') {
+		$this->query = urlencode(strip_tags($get['query']));
 	    }
 	    else {    	
 		$error = 1;
@@ -104,16 +104,16 @@
 	    }	
 	    
 	    // callback
-	    if (isset($_GET['callback']) && $_GET['callback'] != '') {
-		$this->callback = strip_tags($_GET['callback']);
+	    if (isset($get['callback']) && $get['callback'] != '') {
+		$this->callback = strip_tags($get['callback']);
 	    }
 	    else {    	
 		$this->callback = '';
 	    }	    
 	    
 	    // language
-	    if (isset($_GET['language']) && $_GET['language'] != '') {
-		$this->language = strip_tags($_GET['language']);
+	    if (isset($get['language']) && $get['language'] != '') {
+		$this->language = strip_tags($get['language']);
 	    }
 	    else {    	
 		$error = 1;
@@ -121,8 +121,8 @@
 	    }	   
 
 	    // citationstyle
-	    if (isset($_GET['citationstyle']) && $_GET['citationstyle'] != '') {
-		$citationstyle = strip_tags($_GET['citationstyle']);
+	    if (isset($get['citationstyle']) && $get['citationstyle'] != '') {
+		$citationstyle = strip_tags($get['citationstyle']);
 		$csl_file = 'styles/' . $citationstyle . '.csl';
 		if (file_exists($csl_file)) {
 			$csl_data = file_get_contents($csl_file);		
@@ -139,8 +139,8 @@
 	    }	
 
 	    // count
-	    if (isset($_GET['count']) && $_GET['count'] != '') {
-		$this->count = strip_tags($_GET['count']);
+	    if (isset($get['count']) && $get['count'] != '') {
+		$this->count = strip_tags($get['count']);
 		if (! is_numeric($this->count)) {
 		    $error = 1;
 		    $errorMessages .= 'Ungültige Angabe für Parameter "count"!<br />';		
@@ -151,9 +151,9 @@
 	    }	    
 	    
 	    // highlight?
-	    if (isset($_GET['highlight']) && $_GET['highlight'] != '') {
-		if ($_GET['highlight'] == 1 || $_GET['highlight'] == 0) {
-		    $this->highlight = strip_tags($_GET['highlight']);
+	    if (isset($get['highlight']) && $get['highlight'] != '') {
+		if ($get['highlight'] == 1 || $get['highlight'] == 0) {
+		    $this->highlight = strip_tags($get['highlight']);
 		}
 		else {
 		    $this->highlight = '0';
@@ -164,9 +164,9 @@
 	    }	
 
 	    // nohtml? pure string?
-	    if (isset($_GET['nohtml']) && $_GET['nohtml'] != '') {
-		if ($_GET['nohtml'] == 1 || $_GET['nohtml'] == 0) {
-		    $this->nohtml = strip_tags($_GET['nohtml']);
+	    if (isset($get['nohtml']) && $get['nohtml'] != '') {
+		if ($get['nohtml'] == 1 || $get['nohtml'] == 0) {
+		    $this->nohtml = strip_tags($get['nohtml']);
 		}
 		else {
 		    $this->nohtml = 0;
