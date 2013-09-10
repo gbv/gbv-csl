@@ -1,5 +1,9 @@
 <?php
 
+include_once 'citeproc/CiteProc.php';
+include_once 'risToCsl.php';
+include_once 'typeTranslator.php';
+  
 class cslProvider {
     private $debug = '';
     private $database = '';

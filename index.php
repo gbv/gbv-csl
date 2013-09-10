@@ -17,16 +17,7 @@
     else {
         header('Content-Type: application/javascript; charset=utf8');
     }
-    
-     // include citationstyle-processor
-    include ('citeproc/CiteProc.php');        
-    
-    // include risToCsl-Mapper
-    include ('risToCsl.php');
-    
-    // include type-Translator
-    include ('typeTranslator.php');
-        
+       
     // -- Piwik Tracking API init --
     require_once "PiwikTracker.php";
     

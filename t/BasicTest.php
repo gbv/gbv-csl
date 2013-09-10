@@ -3,9 +3,6 @@
 error_reporting(E_ERROR | E_PARSE);
 set_include_path(get_include_path() . PATH_SEPARATOR .__DIR__.'/..');
 
-include_once 'citeproc/CiteProc.php';
-include_once 'risToCsl.php';
-include_once 'typeTranslator.php';
 include_once 'cslProvider.php';
 
 class BasicTest extends PHPUnit_Framework_TestCase {

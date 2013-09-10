@@ -1,4 +1,4 @@
 test:
-	@phpunit phpunit
+	@phpunit t
 
 .PHONY: test
