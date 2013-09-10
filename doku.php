@@ -102,15 +102,26 @@
 		<table>
 		    <tr>
 			<td>Einfach:</td>
-			<td>http://<?php echo $_SERVER['SERVER_NAME']; ?>/csl/?query=pica.all=Waldfee&citationstyle=ieee&language=de</td>
+            <td><?php 
+        function url($path){
+          return sprintf( "%s://%s%s$path",
+          isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+              $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI']);
+        }
+                $url = url("?query=pica.all=Waldfee&citationstyle=ieee&language=de"); 
+                echo "<a href='$url'>$url</a>"; ?>
+            </td>
 		    </tr>
 		    <tr>
 			<td>Ohne HTML als Formatierung:</td>
-			<td>http://<?php echo $_SERVER['SERVER_NAME']; ?>/csl/?query=pica.all=Waldfee&citationstyle=padagogische-hochschule-heidelberg&count=15&nohtml=1&language=de</td>
+            <td><?php $url = url("?query=pica.all=Waldfee&citationstyle=padagogische-hochschule-heidelberg&count=15&nohtml=1&language=de");
+                echo "<a href='$url'>$url</a>"; ?>
+            </td>
 		    </tr>
 		    <tr>
 			<td>Mit Formatierung und Highlighting:</td>
-			<td>http://<?php echo $_SERVER['SERVER_NAME']; ?>/csl/?query=pica.all=Waldfee&citationstyle=ieee&count=5&highlight=1&language=de</td>
+            <td><?php $url = url("?query=pica.all=Waldfee&citationstyle=ieee&count=5&highlight=1&language=de");
+                echo "<a href='$url'>$url</a>"; ?>
 		    </tr>	    		    		    		    		    		    
 		</table>				
 	    </div>
