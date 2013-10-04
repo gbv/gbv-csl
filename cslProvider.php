@@ -3,6 +3,7 @@
 include_once 'citeproc/CiteProc.php';
 include_once 'risToCsl.php';
 include_once 'typeTranslator.php';
+include_once 'cacher.php';
   
 class cslProvider {
     private $debug = '';
@@ -13,6 +14,7 @@ class cslProvider {
     private $language = '';
     private $highlight = '';
     private $nohtml = '';
+    private $caching = '';
     private $citeproc = '';
     
     function __construct () {
@@ -147,7 +149,20 @@ class cslProvider {
         }
         else {
             $this->nohtml = 0;
-        }                                                
+        }       
+        
+        // caching?
+        if (isset($get['caching']) && $get['caching'] != '') {
+            if ($get['caching'] == 1 || $get['caching'] == 0) {
+                $this->caching = strip_tags($get['caching']);
+            }
+            else {
+                $this->caching = 0;
+            }                
+        }
+        else {
+            $this->caching = 0;
+        }                                                                                            
 
         // error-Messages
         if ($error) {
@@ -155,7 +170,8 @@ class cslProvider {
                 include("doku.php");
             return 0;
         }        
-        return 1;        
+
+        return 1;    
     }
     
     public function trackPiwik () {    
@@ -168,10 +184,35 @@ class cslProvider {
     }
     
     public function buildCitations() {
+        
+        // before building something, maybe check if result is yet in cache
+        if ($this->caching == 1) {
+            
+            $hashString =   $this->debug . 
+                            $this->database . 
+                            $this->query . 
+                            $this->count . 
+                            $this->callback . 
+                            $this->language . 
+                            $this->highlight . 
+                            $this->nohtml . 
+                            $this->caching;
+                            
+            $hash = hash(md5, $hashString);
+            
+            $cacher = new cacher($hash);
+            
+            $cacheResult = $cacher->getFromCache();
+            
+            if ($cacheResult) {
+                return $cacher->getFromCache();
+            }
+        }
+        
         // start search and get mods-records as a first result    
         $sruPath = 'http://sru.gbv.de/' . $this->database . '?recordSchema=mods&version=1.1&operation=searchRetrieve&startRecord=1&maximumRecords=' . $this->count . '&query=' . $this->query;
         $sruData = file_get_contents($sruPath);
-            
+           
         // get rid of namespace
         $sruData = str_replace('<zs:', '<zs_', $sruData);
         $sruData = str_replace('</zs:', '</zs_', $sruData);
@@ -254,7 +295,12 @@ class cslProvider {
         // add callback-function?
         if ($this->callback != '') {
             $result = $this->callback . '(' . $result . ');';
-        }                
+        }               
+
+        // if it wasnt in cache
+        if ($this->caching == 1 && $cacheResult == 0) {
+            $cacher->putToCache($result);
+        }
         return $result;
     }
 }

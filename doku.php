@@ -95,7 +95,11 @@
 		    <tr>
 			<td>nohtml</td>
 			<td>Ergebnisse ohne HTML-Formatierung? ("0" oder "1". Standard "0")</td>
-		    </tr>    		    		    		    		    		    
+		    </tr>   
+		    <tr>
+			<td>caching</td>
+			<td>den Cache nutzen (1-tägige Lebensdauer, "0" oder "1". Standard "0"))</td>
+		    </tr>                        		    		    		    		    		    
 		</table>	
 		
 		<h2>Beispielanfragen:</h2>

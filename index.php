@@ -19,14 +19,14 @@
     }
        
     // -- Piwik Tracking API init --
-    require_once "PiwikTracker.php";
+    //require_once "PiwikTracker.php";
     
     require_once 'cslProvider.php';
  
     $cslProvider = new cslProvider();
     
     if ($cslProvider->init($_GET)) {
-        $cslProvider->trackPiwik();
+       // $cslProvider->trackPiwik();
         $result = $cslProvider->buildCitations();       
         echo $result;
     }
