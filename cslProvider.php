@@ -260,6 +260,17 @@ class cslProvider {
                     $queryParts = explode('+', $queryParts);                                    
                     
                     foreach ($queryParts as $part) {
+                        
+                        $part_highlighted = '';
+                        
+                        $part = str_replace('%C3%A4', 'ä', $part);
+                        $part = str_replace('%C3%84', 'Ä', $part);
+                        $part = str_replace('%C3%B6', 'ö', $part);
+                        $part = str_replace('%C3%96', 'Ö', $part);
+                        $part = str_replace('%C3%BC', 'ü', $part);
+                        $part = str_replace('%C3%9C', 'Ü', $part);
+                        $part = str_replace('%C3%9F', 'ß', $part);                        
+                                                                                            
                         $citation = preg_replace("/$part/i", "<span class=\"highlight\">\$0</span>", $citation);
                     }                        
             }                
